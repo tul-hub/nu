@@ -11,6 +11,8 @@
             --secondary-color: #f4f4f4;
             --text-color: #333;
             --border-radius: 8px;
+            --fb-color: #1877f2;
+            --wa-color: #25D366;
         }
 
         body {
@@ -146,6 +148,66 @@
             display: none;
         }
 
+        /* Highlighted Link Section */
+        .highlight-link-box {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            border-radius: var(--border-radius);
+            text-align: center;
+        }
+
+        .highlight-link {
+            font-weight: bold;
+            color: #856404;
+            text-decoration: none;
+            font-size: 1.1em;
+            word-break: break-all;
+        }
+        
+        .highlight-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Social Share Section */
+        .share-section {
+            margin-top: 20px;
+            text-align: center;
+            border-top: 1px dashed #ccc;
+            padding-top: 20px;
+        }
+
+        .share-title {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .share-btn {
+            display: inline-block;
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            transition: opacity 0.3s;
+        }
+        
+        .share-btn:hover {
+            opacity: 0.9;
+        }
+
+        .fb-share {
+            background-color: var(--fb-color);
+        }
+
+        .wa-share {
+            background-color: var(--wa-color);
+        }
+
         /* Bottom Ad Section (970x90) */
         .ad-container {
             width: 100%;
@@ -191,6 +253,14 @@
 
     <div class="container">
         <h2>NU Result Calculator</h2>
+
+
+        <!-- Highlighted Link Section -->
+        <div class="highlight-link-box">
+            <span>Visit Official Site:</span><br>
+            <a href="https://tul-hub.github.io/nu/" class="highlight-link" target="_blank">https://tul-hub.github.io/nu/</a>
+        </div>
+
         
         <div class="form-group">
             <label for="ssc">SSC GPA (Out of 5.00)</label>
@@ -232,6 +302,19 @@
                 <span>Total Score (Out of 200):</span>
                 <span id="res-total">0.00</span>
             </div>
+        </div>
+
+        <!-- Social Sharing Section -->
+        <div class="share-section">
+            <div class="share-title">Share this calculator</div>
+            <!-- Facebook Share -->
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://tul-hub.github.io/nu/" target="_blank" class="share-btn fb-share">
+                Share on Facebook
+            </a>
+            <!-- WhatsApp Share -->
+            <a href="whatsapp://send?text=Check out this NU Admission Result Calculator: https://tul-hub.github.io/nu/" data-action="share/whatsapp/share" class="share-btn wa-share">
+                Share on WhatsApp
+            </a>
         </div>
     </div>
 
