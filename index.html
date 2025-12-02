@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NU Admission Result Calculator</title>
+    <style>
+        :root {
+            --primary-color: #006a4e; /* NU Green style */
+            --secondary-color: #f4f4f4;
+            --text-color: #333;
+            --border-radius: 8px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e9ecef;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+        }
+
+        /* Main Container */
+        .container {
+            width: 90%;
+            max-width: 500px;
+            background: white;
+            padding: 30px;
+            margin-top: 50px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            flex: 1; /* Push footer down */
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            box-sizing: border-box; /* Fix padding issue */
+            transition: border 0.3s;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .optional-tag {
+            font-size: 0.85em;
+            color: #777;
+            font-weight: normal;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn-calc {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-calc:hover {
+            background-color: #004d38;
+        }
+
+        .btn-reset {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background-color: #a71d2a;
+        }
+
+        /* Result Section */
+        #result-area {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            display: none; /* Hidden by default */
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+        .total-row {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ccc;
+            font-weight: bold;
+            font-size: 1.2em;
+            color: var(--primary-color);
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* Bottom Ad Section (970x90) */
+        .ad-container {
+            width: 100%;
+            background-color: #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0;
+            margin-top: auto; /* Pushes to bottom */
+        }
+
+        .ad-box {
+            width: 970px;
+            height: 90px;
+            background-color: #ccc;
+            border: 1px dashed #999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #666;
+            font-size: 14px;
+            /* Responsive handling for the fixed ad size */
+            max-width: 100%; 
+            overflow: hidden;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            .container {
+                width: 90%;
+                margin-top: 20px;
+            }
+            /* The ad will scale or clip on mobile to prevent breaking layout */
+            .ad-box {
+                width: 100%; 
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>NU Result Calculator</h2>
+        
+        <div class="form-group">
+            <label for="ssc">SSC GPA (Out of 5.00)</label>
+            <input type="number" id="ssc" placeholder="e.g. 4.50" step="0.01" min="1" max="5">
+            <div id="ssc-error" class="error">Please enter a valid GPA (1.00 - 5.00)</div>
+        </div>
+
+        <div class="form-group">
+            <label for="hsc">HSC GPA (Out of 5.00)</label>
+            <input type="number" id="hsc" placeholder="e.g. 5.00" step="0.01" min="1" max="5">
+            <div id="hsc-error" class="error">Please enter a valid GPA (1.00 - 5.00)</div>
+        </div>
+
+        <div class="form-group">
+            <label for="mcq">MCQ Mark <span class="optional-tag">(Optional, Max 100)</span></label>
+            <input type="number" id="mcq" placeholder="e.g. 75" min="0" max="100">
+            <div id="mcq-error" class="error">Please enter a valid mark (0 - 100)</div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn-calc" onclick="calculateResult()">Calculate Result</button>
+            <button class="btn-reset" onclick="resetForm()">Reset</button>
+        </div>
+
+        <div id="result-area">
+            <div class="result-row">
+                <span>SSC Contribution (40%):</span>
+                <span id="res-ssc">0.00</span>
+            </div>
+            <div class="result-row">
+                <span>HSC Contribution (60%):</span>
+                <span id="res-hsc">0.00</span>
+            </div>
+            <div class="result-row">
+                <span>MCQ Score:</span>
+                <span id="res-mcq">0</span>
+            </div>
+            <div class="result-row total-row">
+                <span>Total Score (Out of 200):</span>
+                <span id="res-total">0.00</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="ad-container">
+        <div class="ad-box">
+            Ad Space (970x90)
+        </div>
+    </div>
+
+    <script>
+        function calculateResult() {
+            // Get values
+            const sscInput = document.getElementById('ssc').value;
+            const hscInput = document.getElementById('hsc').value;
+            const mcqInput = document.getElementById('mcq').value;
+
+            // Reset errors
+            document.querySelectorAll('.error').forEach(el => el.style.display = 'none');
+            let isValid = true;
+
+            // Validation logic
+            const sscGpa = parseFloat(sscInput);
+            const hscGpa = parseFloat(hscInput);
+            // Treat empty MCQ as 0
+            const mcqMark = mcqInput === "" ? 0 : parseFloat(mcqInput);
+
+            if (!sscInput || sscGpa < 1 || sscGpa > 5) {
+                document.getElementById('ssc-error').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!hscInput || hscGpa < 1 || hscGpa > 5) {
+                document.getElementById('hsc-error').style.display = 'block';
+                isValid = false;
+            }
+
+            if (mcqMark < 0 || mcqMark > 100) {
+                document.getElementById('mcq-error').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!isValid) {
+                document.getElementById('result-area').style.display = 'none';
+                return;
+            }
+
+            // Calculation Formula for NU
+            // SSC (40% of 100 marks based on GPA 5) -> GPA * 8
+            // HSC (60% of 100 marks based on GPA 5) -> GPA * 12
+            const sscScore = sscGpa * 8;
+            const hscScore = hscGpa * 12;
+            const totalScore = sscScore + hscScore + mcqMark;
+
+            // Display Results
+            document.getElementById('res-ssc').innerText = sscScore.toFixed(2);
+            document.getElementById('res-hsc').innerText = hscScore.toFixed(2);
+            document.getElementById('res-mcq').innerText = mcqMark;
+            document.getElementById('res-total').innerText = totalScore.toFixed(2);
+
+            document.getElementById('result-area').style.display = 'block';
+        }
+
+        function resetForm() {
+            document.getElementById('ssc').value = '';
+            document.getElementById('hsc').value = '';
+            document.getElementById('mcq').value = '';
+            document.getElementById('result-area').style.display = 'none';
+            document.querySelectorAll('.error').forEach(el => el.style.display = 'none');
+        }
+    </script>
+</body>
+</html>
